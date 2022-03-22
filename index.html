@@ -15,9 +15,10 @@
 
 <body>
     <h1 class="inline-header">Site Editor</h1>
-    <span id="filename">index.html</span>
+    <span id="filename">{{ .filename }}</span>
     <form method="post">
-        <textarea id="editor">Hello, World!</textarea>
+        <input type="hidden" name="csrf_token" value="{{ .token }}">
+        <textarea id="editor">{{ .content }}</textarea>
     </form>
 </body>
 

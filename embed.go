@@ -49,7 +49,9 @@ func ContentType(path string, bytes []byte) string {
 func (e EditorView) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// sanitize the path
 	filepath := "www" + path.Clean(r.URL.Path)
-	log.Println("Serving:", filepath)
+	if (filepath == "www/") || (filepath == "www") {
+		filepath = "www/index.html"
+	}
 	// if we encounter the path in the embedded Content FS, serve it
 	if file, err := Content.Open(filepath); err == nil {
 		bytes, err := ioutil.ReadAll(file)
@@ -59,8 +61,6 @@ func (e EditorView) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		// write the content-type header
 		w.Header().Set("Content-Type", ContentType(filepath, bytes))
-		ct := w.Header().Get("Content-Type")
-		log.Println("Content-Type,", ct)
 		// write the content
 		w.Write(bytes)
 	} else {

@@ -1,7 +1,13 @@
 package tinymce
 
-import "fmt"
+import (
+	"io/ioutil"
+)
 
 func LoadFileOnDisk(file string) ([]byte, error) {
-	return nil, fmt.Errorf("LoadFileOnDisk: Not implemented")
+	fb, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+	return fb, nil
 }

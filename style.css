@@ -72,3 +72,7 @@ iframe {
 .tox.tox-tinymce {
     height: 100vh !important;
 }
+
+.inline-header {
+    display: inline;
+}

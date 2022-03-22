@@ -6,65 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script src="/tinymce/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="/tinymce.js" referrerpolicy="origin"></script>
 
-    <script>
-        tinymce.init({
-            selector: '#editor',
-            plugins: 'preview importcss searchreplace autolink directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
-            menubar: 'file custom edit view insert format tools table help',
-            toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen preview | insertfile image media template link anchor codesample | ltr rtl',
-            menu: {
-                custom: {
-                    title: 'Load/Save',
-                    items: 'savefile saveaswhat loadfile'
-                }
-            },
-            setup: function(editor) {
-                editor.ui.registry.addMenuItem('savefile', {
-                    text: 'Save',
-                    onAction: function() {
-                        //gather everything in the textarea and send it to the server /save
-                        var text = editor.getContent();
-                        var data = {
-                            "text": text,
-                        };
-                        var xhr = new XMLHttpRequest();
-                        xhr.open("POST", "/save", true);
-                        xhr.setRequestHeader("Content-Type", "application/json");
-                        xhr.send(JSON.stringify(data));
-                        //editor.insertContent('<p>Here\'s some content inserted from a basic menu!</p>');
-                    }
-                });
-
-                editor.ui.registry.addNestedMenuItem('saveaswhat', {
-                    text: 'Save As',
-                    getSubmenuItems: function() {
-                        return [{
-                            type: 'menuitem',
-                            text: 'Download file in browser',
-                            onAction: function() {
-                                editor.insertContent('<p>Here\'s some content inserted from a submenu item!</p>');
-                            }
-                        }];
-                    }
-                });
-
-                editor.ui.registry.addMenuItem('loadfile', {
-                    text: 'Load',
-                    onAction: function() {
-                        editor.insertContent('<p>Here\'s some content inserted from a basic menu!</p>');
-                    }
-                });
-            },
-        });
-    </script>
     <title>Site Editor</title>
     <link rel=stylesheet type=text/css href=/style.css />
 
 </head>
 
 <body>
-    <h1>Site Editor</h1>
+    <h1 class="inline-header">Site Editor</h1>
+    <span id="filename">index.html</span>
     <form method="post">
         <textarea id="editor">Hello, World!</textarea>
     </form>

@@ -164,6 +164,21 @@ func CopyFavIcon() error {
 	return nil
 }
 
+func CopyJavascript() error {
+	src := "tinymce.js"
+	dst := "www/tinymce.js"
+	os.Remove(dst)
+	byt, err := ioutil.ReadFile(src)
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(dst, byt, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func main() {
 	version, err := GetNPMPackageVersionFromJSON()
 	if err != nil {
@@ -191,5 +206,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	err = CopyJavascript()
+	if err != nil {
+		log.Fatal(err)
+	}
 }

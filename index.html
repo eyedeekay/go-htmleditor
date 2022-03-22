@@ -10,7 +10,7 @@
     <script>
         tinymce.init({
             selector: '#editor',
-            plugins: 'print preview paste importcss searchreplace autolink directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons',
+            plugins: 'preview importcss searchreplace autolink directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
             menubar: 'file custom edit view insert format tools table help',
             toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen preview | insertfile image media template link anchor codesample | ltr rtl',
             menu: {
@@ -23,7 +23,16 @@
                 editor.ui.registry.addMenuItem('savefile', {
                     text: 'Save',
                     onAction: function() {
-                        editor.insertContent('<p>Here\'s some content inserted from a basic menu!</p>');
+                        //gather everything in the textarea and send it to the server /save
+                        var text = editor.getContent();
+                        var data = {
+                            "text": text,
+                        };
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "/save", true);
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.send(JSON.stringify(data));
+                        //editor.insertContent('<p>Here\'s some content inserted from a basic menu!</p>');
                     }
                 });
 

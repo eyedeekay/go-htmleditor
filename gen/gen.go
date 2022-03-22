@@ -149,6 +149,21 @@ func CopyStyleCSS() error {
 	return nil
 }
 
+func CopyFavIcon() error {
+	src := "favicon.ico"
+	dst := "www/favicon.ico"
+	os.Remove(dst)
+	byt, err := ioutil.ReadFile(src)
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(dst, byt, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func main() {
 	version, err := GetNPMPackageVersionFromJSON()
 	if err != nil {
@@ -172,4 +187,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	err = CopyFavIcon()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }

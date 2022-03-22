@@ -65,9 +65,16 @@ func (e EditorView) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.Write(bytes)
 	} else {
 		apipath := strings.TrimPrefix(filepath, "www/")
+		log.Println("API:", apipath)
 		// if we encounter the path in the embedded Content FS, serve it
 		switch apipath {
 		case "save":
+			bodybytes, err := ioutil.ReadAll(r.Body)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			log.Println("Save:", string(bodybytes))
 			// save the content
 		case "load":
 			// load the content and refresh the page

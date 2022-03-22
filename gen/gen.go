@@ -134,6 +134,21 @@ func CopyIndexHTML() error {
 	return nil
 }
 
+func CopyStyleCSS() error {
+	src := "style.css"
+	dst := "www/style.css"
+	os.Remove(dst)
+	byt, err := ioutil.ReadFile(src)
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(dst, byt, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func main() {
 	version, err := GetNPMPackageVersionFromJSON()
 	if err != nil {
@@ -153,5 +168,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//	tinymce.Serve()
+	err = CopyStyleCSS()
+	if err != nil {
+		log.Fatal(err)
+	}
 }

@@ -121,7 +121,7 @@ func UnzipTinyMCEDotZip(zipFile string) error {
 
 func CopyIndexHTML() error {
 	src := "index.html"
-	dst := "www/index.html"
+	dst := "www/tinymce.html"
 	os.Remove(dst)
 	byt, err := ioutil.ReadFile(src)
 	if err != nil {
@@ -136,7 +136,7 @@ func CopyIndexHTML() error {
 
 func CopyStyleCSS() error {
 	src := "style.css"
-	dst := "www/style.css"
+	dst := "www/tinymce.css"
 	os.Remove(dst)
 	byt, err := ioutil.ReadFile(src)
 	if err != nil {

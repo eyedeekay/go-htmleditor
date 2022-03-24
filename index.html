@@ -9,12 +9,12 @@
     <script src="/tinymce.js" referrerpolicy="origin"></script>
 
     <title>Site Editor</title>
-    <link rel=stylesheet type=text/css href=/style.css />
+    <link rel=stylesheet type=text/css href=/tinymce.css />
 
 </head>
 
 <body>
-    <h1 class="inline-header">Site Editor</h1>
+    <h1 class="inline-header"><a href="{{ .hostname }}">Site Editor</a></h1>
     <span id="filename">{{ .filename }}</span>
     <form method="post">
         <input type="hidden" name="csrf_token" value="{{ .token }}">

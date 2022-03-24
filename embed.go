@@ -17,13 +17,25 @@ import (
 	"github.com/justinas/nosurf"
 )
 
+var MinHtmlDoc = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hello HTML Document</title>
+</head>
+<body>
+<h1>Hello HTML!</h1>
+<p>This is a paragraph.</p>
+</body>
+</html>`
+
 //go:embed www/*
 var Content embed.FS
 
 //go:generate go run --tags generate ./gen/gen.go
 
-//templatestring is index.html from the embedded www directory
-var templateFile, _ = Content.Open("www/index.html")
+//templatestring is tinymce.html from the embedded www directory
+var templateFile, _ = Content.Open("www/tinymce.html")
 var templateString, _ = ioutil.ReadAll(templateFile)
 
 var templ = template.Must(template.New("t1").Parse(string(templateString)))
@@ -67,7 +79,7 @@ func (e EditorView) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// sanitize the path
 	cleanpath := "www" + path.Clean(r.URL.Path)
 	if (cleanpath == "www/") || (cleanpath == "www") {
-		cleanpath = "www/index.html"
+		cleanpath = "www/tinymce.html"
 	}
 
 	//w.Header().Set("Access-Control-Allow-Headers", "content-type")
@@ -90,7 +102,7 @@ func (e EditorView) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.Header().Set("Content-Type", ContentType(cleanpath, bytes))
-		if cleanpath == "www/index.html" {
+		if cleanpath == "www/tinymce.html" {
 			lb, err := ioutil.ReadFile(filepath.Join(e.WorkDir, e.File))
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -98,8 +110,9 @@ func (e EditorView) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			}
 			context := make(map[string]string)
 			context["token"] = token
-			context["filename"] = filepath.Join(e.WorkDir, e.File)
+			context["filename"] = e.File
 			context["content"] = string(lb)
+			context["hostname"] = e.Origin()
 			log.Println("Serving:", cleanpath)
 			if err := templ.Execute(w, context); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -120,6 +133,26 @@ func (e EditorView) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		switch apipath {
+		case "new":
+			data := make(map[string]interface{})
+			err = json.Unmarshal(bytes, &data)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			fp := data["filename"].(string)
+			context["filename"] = fp
+			log.Println("Creating:", context["filename"])
+			if err := ioutil.WriteFile(filepath.Join(e.WorkDir, context["filename"]), []byte(MinHtmlDoc), 0644); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			if cbytes, err := ioutil.ReadFile(filepath.Join(e.WorkDir, context["filename"])); err == nil {
+				w.Write(cbytes)
+			} else {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 		case "save":
 			context["body"] = string(bytes)
 			log.Println("Save:", context["body"])
@@ -135,10 +168,12 @@ func (e EditorView) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			// redirect home
 			err = SaveFileOnDisk(fp, fb)
 			http.Redirect(w, r, "/", http.StatusFound)
+			return
 		case "download":
 			context["body"] = string(bytes)
 			log.Println("Download:", context["body"])
 			w.Write(bytes)
+			return
 		case "load":
 			// load the content and refresh the page
 			context["body"] = string(bytes)
@@ -158,8 +193,9 @@ func (e EditorView) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			// redirect home
-			http.Redirect(w, r, "/", http.StatusFound)
+			//http.Redirect(w, r, "/", http.StatusFound)
 			w.Write(fb)
+			return
 		default:
 			// serve any files we find in the WorkDir on the filesystem
 			if file, err := os.Open(filepath.Join(e.WorkDir, apipath)); err == nil {
@@ -170,8 +206,10 @@ func (e EditorView) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 				w.Header().Set("Content-Type", ContentType(cleanpath, bytes))
 				w.Write(bytes)
+				return
 			} else {
 				http.NotFound(w, r)
+				return
 			}
 
 		}

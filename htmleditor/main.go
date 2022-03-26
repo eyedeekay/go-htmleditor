@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -20,6 +21,11 @@ func main() {
 		panic(err)
 	}
 	index := filepath.Join(directory, *file)
+	index, err = filepath.Abs(index)
+	if err != nil {
+		panic(err)
+	}
+	log.Println("Editing:", index)
 	if _, err := os.Stat(index); os.IsNotExist(err) {
 		if err := ioutil.WriteFile(index, []byte(tinymce.MinHtmlDoc), 0644); err != nil {
 			panic(err)

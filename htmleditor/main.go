@@ -11,7 +11,7 @@ import (
 
 func main() {
 	host := flag.String("host", "127.0.0.1", "Hostname to listen on")
-	port := flag.Int("port", 8082, "Port to listen on")
+	port := flag.Int("port", 7685, "Port to listen on")
 	dir := flag.String("dir", "./www", "Directory to serve files from")
 	file := flag.String("file", "index.html", "File to serve")
 	flag.Parse()

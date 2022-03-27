@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/tinymce/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="/tinymce.js" referrerpolicy="origin"></script>
+
+    <title>Site Editor</title>
+    <link rel=stylesheet type=text/css href=/tinymce.css />
+
+</head>
+
+<body>
+    <h1 class="inline-header"><a href="{{ .hostname }}">Site Editor</a></h1>
+    <span id="filename">{{ .filename }}</span>
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ .token }}">
+        <textarea id="editor">{{ .content }}</textarea>
+    </form>
+</body>
+
+</html>

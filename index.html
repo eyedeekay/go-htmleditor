@@ -1,25 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
+  <head>
+    <title>
+      go-htmleditor
+    </title>
+    <meta name="author" content="eyedeekay" />
+    <meta name="description" content="go-htmleditor" />
+    <meta name="keywords" content="main" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script type="text/javascript" src=""></script>
+  </head>
+  <body>
+    <div id="navbar">
+      <a href="#shownav">
+        Show navigation
+      </a>
+      <div id="shownav">
+        <div id="hidenav">
+          <ul>
+            <li>
+              <a href="index.html">
+                index
+              </a>
+            </li>
+          </ul>
+          <br>
+          <a href="#hidenav">
+            Hide Navigation
+          </a>
+        </div>
+      </div>
+    </div>
+    <h1>
+      <a href="/">
+        go-htmleditor
+      </a>
+    </h1>
+    <p>
+      TinyMCE based HTML Editor using Go to host.
+    </p>
+    <p>
+      This tool will be geared toward simple, familiar, WYSIWIG editing of
+      the I2P site which is built into I2P.
+    </p>
+    <div>
+      <a href="#show">
+        Show license
+      </a>
+      <div id="show">
+        <div id="hide">
+          <pre><code>MIT License
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+Copyright (c) 2022 idk
 
-    <script src="/tinymce/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
-    <script src="/tinymce.js" referrerpolicy="origin"></script>
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-    <title>Site Editor</title>
-    <link rel=stylesheet type=text/css href=/tinymce.css />
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-</head>
-
-<body>
-    <h1 class="inline-header"><a href="{{ .hostname }}">Site Editor</a></h1>
-    <span id="filename">{{ .filename }}</span>
-    <form method="post">
-        <input type="hidden" name="csrf_token" value="{{ .token }}">
-        <textarea id="editor">{{ .content }}</textarea>
-    </form>
-</body>
-
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</code></pre>
+          <a href="#hide">
+            Hide license
+          </a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <iframe src="https://snowflake.torproject.org/embed.html" width="320" height="240" frameborder="0" scrolling="no"></iframe>
+    </div>
+  </body>
 </html>
